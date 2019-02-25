@@ -4,9 +4,8 @@ from sklearn import preprocessing
 import numpy
 
 
-def read_csv_file():
-    data = pd.read_csv('./dataset/ENB2012_data.csv', delimiter=';')
-    return data
+def read_csv_file(path):
+    return pd.read_csv(path, delimiter=';')
 
 
 def normalize_dataset(dataset):
@@ -28,7 +27,5 @@ def save_data_frame_as_a_csv(data_frame, name):
 def delete_cell_from_row_random(query_data):
     for index, row in query_data.iterrows():
         random_column = random.choice(list(query_data.columns.values))
-
         query_data.at[index, random_column] = numpy.nan
-    print(query_data)
     return query_data
