@@ -1,10 +1,11 @@
 import math
+from itertools import islice
 
 from src.utils import *
 
-# k = input('Enter value of k = ')
+k = int(input('Enter value of k = '))
 
-dataset = read_csv_file('./dataset/test.csv')
+dataset = read_csv_file('./dataset/ENB2012_data.csv')
 
 dataset = normalize_dataset(dataset)
 save_data_frame_as_a_csv(dataset, 'normalized_data')
@@ -41,10 +42,18 @@ for missing_data_row, missing_data_column in zip(*numpy.where(pd.isnull(missing_
             sum_one_point_distance += one_point_distance
 
         distance = math.sqrt(sum_one_point_distance)
-        distances_list.append([train_data_index, distance])
+        distances_list.append([train_data_index, distance, train_data.iloc[train_data_index, missing_data_column]])
 
-    distance_df = pd.DataFrame(distances_list, columns=['row', 'distance'])
+    distance_df = pd.DataFrame(distances_list, columns=['row', 'distance', 'value'])
     sorted_distance_df = distance_df.sort_values('distance')
-    print(sorted_distance_df, '\n')
+
+    sum_distance = 0
+    for distance_index, distance_row in islice(sorted_distance_df.iterrows(), int(k)):
+        sum_distance += distance_row['value']
+
+    distance_prediction = sum_distance / k
+
+    print('Predicted Value: ', distance_prediction, 'Real Value: ', dataset.iloc[missing_data_row, missing_data_column])
+
     distance_df.drop(distance_df.columns, axis=1)
     distances_list = [[]]
