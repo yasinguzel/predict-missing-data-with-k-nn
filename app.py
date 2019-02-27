@@ -23,4 +23,4 @@ save_data_frame_as_a_csv(missing_data, 'missing_data')
 
 missing_cells = detect_missing_cells(missing_data)
 
-predict_missing_value(missing_cells, missing_data, train_data, dataset, k)
+predict_missing_value(missing_cells, missing_data, train_data, k)
