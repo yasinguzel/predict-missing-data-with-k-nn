@@ -46,9 +46,13 @@ def find_missing_value_with_weight_voting(distances_list, k):
     for distance_index, distance_row in islice(sorted_distance_df.iterrows(), k):
         for inner_distance_index, inner_distance_row in islice(sorted_distance_df.iterrows(), k):
             if distance_row['value'] == inner_distance_row['value']:
-                sorted_distance_df.at[distance_index, 'weight'] = inner_distance_row['weight']
+                sorted_distance_df.at[distance_index, 'weight'] = sorted_distance_df.at[distance_index, 'weight'] + \
+                                                                  inner_distance_row[
+                                                                      'weight']
 
-    print(sorted_distance_df.sort_values('weight'))
+    sorted_by_weight_df = sorted_distance_df.sort_values('weight')
+    prediction = sorted_by_weight_df.tail(1)['value']
+    print(prediction)
 
 
 def calculate_weight(distance):
